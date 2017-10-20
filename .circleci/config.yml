@@ -13,7 +13,11 @@ jobs:
     - run:
         name: Running Greenkeeper update hook
         command: |
-          node_modules/.bin/greenkeeper-lockfile-update
+          if [ -n "${GH_TOKEN}" ]; then
+            node_modules/.bin/greenkeeper-lockfile-update
+          else
+            echo 'Missing authorization for GitHub; skipping Greenkeeper hook'
+          fi
   greenkeeper_upload:
     <<: *defaults
     steps:
@@ -22,7 +26,11 @@ jobs:
     - run:
         name: Running Greenkeeper upload hook
         command: |
-          node_modules/.bin/greenkeeper-lockfile-upload
+          if [ -n "${GH_TOKEN}" ]; then
+            node_modules/.bin/greenkeeper-lockfile-upload
+          else
+            echo 'Missing authorization for GitHub; skipping Greenkeeper hook'
+          fi
   prepare:
     <<: *defaults
     steps:
